@@ -7,6 +7,7 @@ class Person:
     def __init__(self, name, phone_number):
         self.name = name
         self.phone_number = phone_number
+        self.id = Person.id
         Person.id += 1
 
     def change_name(self, name):
@@ -17,18 +18,17 @@ class Person:
 
 
 class PhoneBook:
-    list = None
+    list = {}
 
     def __init__(self):
         """ Create list for phone book """
-        PhoneBook.list = dict
 
     @staticmethod
     def add_person(person: Person):
         """ Add person to book 
         :type person: Person
         """
-        PhoneBook.list.update({person.name : person.phone_number})
+        PhoneBook.list[person.id] = person
 
     @staticmethod
     def del_person(person: Person):
@@ -39,8 +39,8 @@ class PhoneBook:
 
     @staticmethod
     def show_list():
-        for name, phone in PhoneBook.list.items():
-            print("name is {0}, phone number is {1}".format(name, phone))
+        for id, person in PhoneBook.list.items():
+            print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
 
 
 book = PhoneBook()
@@ -48,9 +48,8 @@ book = PhoneBook()
 tmp_list_name = ("Alex", "Olga", "Danial", "Julia", "Anastasia", "Inna", "Valeria")
 tmp_list_phone_number = ("+38099153223", "+380112751923", "+380932876923", "+3809365365323")
 
-for name in range(4):
+for name in range(5):
     person = Person(tmp_list_name[random.randint(0, 6)], tmp_list_phone_number[random.randint(0, 3)])
     book.add_person(person)
-    print("name is {0}, phone number is {1}".format(person.name, person.phone_number))
 
-# book.show_list()
+book.show_list()
