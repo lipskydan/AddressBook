@@ -43,13 +43,39 @@ class PhoneBook:
             print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
 
 
-book = PhoneBook()
+class PhoneBookUI:
+    book: PhoneBook = None
 
-tmp_list_name = ("Alex", "Olga", "Danial", "Julia", "Anastasia", "Inna", "Valeria")
-tmp_list_phone_number = ("+38099153223", "+380112751923", "+380932876923", "+3809365365323")
+    def __init__(self):
+        """ Create list for phone book """
+        PhoneBookUI.book = PhoneBook()
 
-for name in range(5):
-    person = Person(tmp_list_name[random.randint(0, 6)], tmp_list_phone_number[random.randint(0, 3)])
-    book.add_person(person)
+    @staticmethod
+    def add_person_UI():
+        name = input('Input name ---> ')
+        phone_number = input('Input phone number ---> ')
+        PhoneBookUI.book.add_person(Person(name, phone_number))
 
-book.show_list()
+    @staticmethod
+    def show_list_UI():
+        for id, person in PhoneBook.list.items():
+            print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
+
+
+# book = PhoneBook()
+#
+# tmp_list_name = ("Alex", "Olga", "Danial", "Julia", "Anastasia", "Inna", "Valeria")
+# tmp_list_phone_number = ("+38099153223", "+380112751923", "+380932876923", "+3809365365323")
+#
+# for name in range(5):
+#     person = Person(tmp_list_name[random.randint(0, 6)], tmp_list_phone_number[random.randint(0, 3)])
+#     book.add_person(person)
+#
+# book.show_list()
+
+book2 = PhoneBookUI()
+
+for i in range(2):
+    book2.add_person_UI()
+
+book2.show_list()
