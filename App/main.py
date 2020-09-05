@@ -1,4 +1,5 @@
 import random
+import pickle
 
 
 class Person:
@@ -18,29 +19,37 @@ class Person:
 
 
 class PhoneBook:
-    list = {}
+    book_arr = {}
+    save_file = 'save_file.data'
 
     def __init__(self):
         """ Create list for phone book """
 
     @staticmethod
     def add_person(person: Person):
-        """ Add person to book 
-        :type person: Person
-        """
-        PhoneBook.list[person.id] = person
+        """ Add person to book """
+        PhoneBook.book_arr[person.id] = person
 
     @staticmethod
     def del_person(person: Person):
-        """ Delete person from book
-        :type person: Person
-        """
-        del PhoneBook.list[person.name]
+        """ Delete person from book """
+        del PhoneBook.book_arr[person.name]
 
     @staticmethod
     def show_list():
-        for id, person in PhoneBook.list.items():
+        for id, person in PhoneBook.book_arr.items():
             print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
+
+    @staticmethod
+    def save_book():
+        f = open(PhoneBook.save_file, 'wb')
+        pickle.dump(PhoneBook.book_arr)
+        f.close()
+
+    @staticmethod
+    def load_book():
+        f = open(PhoneBook.save_file, 'rb')
+        PhoneBook.book_arr = pickle.load(f)
 
 
 class PhoneBookUI:
@@ -49,6 +58,25 @@ class PhoneBookUI:
     def __init__(self):
         """ Create list for phone book """
         PhoneBookUI.book = PhoneBook()
+        PhoneBookUI.menu_UI()
+
+    @staticmethod
+    def menu_UI():
+        while True:
+            menu_list = '1. Add to book\n2. Dell from book\n3. Show book\n0. Exit\n\n'
+            number = int(input(menu_list + 'Input number ---> '))
+
+            if number == 1:
+                PhoneBookUI.add_person_UI()
+            elif number == 2:
+                print('del el')
+            elif number == 3:
+                PhoneBookUI.show_list_UI()
+
+            cont = input('Would you like to continue(y/n) ---> ')
+
+            if cont == 'y':
+                break
 
     @staticmethod
     def add_person_UI():
@@ -58,24 +86,13 @@ class PhoneBookUI:
 
     @staticmethod
     def show_list_UI():
-        for id, person in PhoneBook.list.items():
+        for id, person in PhoneBook.book_arr.items():
             print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
 
 
-# book = PhoneBook()
-#
-# tmp_list_name = ("Alex", "Olga", "Danial", "Julia", "Anastasia", "Inna", "Valeria")
-# tmp_list_phone_number = ("+38099153223", "+380112751923", "+380932876923", "+3809365365323")
-#
-# for name in range(5):
-#     person = Person(tmp_list_name[random.randint(0, 6)], tmp_list_phone_number[random.randint(0, 3)])
-#     book.add_person(person)
-#
-# book.show_list()
+def main():
+    PhoneBookUI()
 
-book2 = PhoneBookUI()
 
-for i in range(2):
-    book2.add_person_UI()
-
-book2.show_list()
+if __name__ == '__main__':
+    main()
