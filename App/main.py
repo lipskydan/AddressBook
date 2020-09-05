@@ -20,7 +20,7 @@ class Person:
 
 class PhoneBook:
     book_arr = {}
-    save_file = 'save_file.data'
+    file = 'save_file.pickle'
 
     def __init__(self):
         """ Create list for phone book """
@@ -42,14 +42,18 @@ class PhoneBook:
 
     @staticmethod
     def save_book():
-        f = open(PhoneBook.save_file, 'wb')
-        pickle.dump(PhoneBook.book_arr)
-        f.close()
+        with open(PhoneBook.file, 'wb') as file:
+            pickle.dump(PhoneBook.book_arr, file)
 
     @staticmethod
     def load_book():
-        f = open(PhoneBook.save_file, 'rb')
-        PhoneBook.book_arr = pickle.load(f)
+        with open(PhoneBook.file, 'rb') as file:
+            new_book = pickle.load(file)
+            print('Save book')
+
+            PhoneBook.book_arr = new_book
+            print('Load new book')
+
 
 
 class PhoneBookUI:
@@ -61,9 +65,20 @@ class PhoneBookUI:
         PhoneBookUI.menu_UI()
 
     @staticmethod
+    def cont():
+        cont = input('Would you like to continue(y/n) ---> ')
+
+        if cont == 'n':
+            return False
+
+        return True
+
+
+    @staticmethod
     def menu_UI():
-        while True:
-            menu_list = '1. Add to book\n2. Dell from book\n3. Show book\n0. Exit\n\n'
+        run = True
+        while run:
+            menu_list = '1. Add to book\n2. Dell from book\n3. Show book\n4.Save book\n5.Load book\n0. Exit\n\n'
             number = int(input(menu_list + 'Input number ---> '))
 
             if number == 1:
@@ -72,11 +87,14 @@ class PhoneBookUI:
                 print('del el')
             elif number == 3:
                 PhoneBookUI.show_list_UI()
-
-            cont = input('Would you like to continue(y/n) ---> ')
-
-            if cont == 'y':
+            elif number == 4:
+                PhoneBookUI.save_book_UI()
+            elif number == 5:
+                PhoneBookUI.load_book_UI()
+            elif number == 0:
                 break
+
+            run = PhoneBookUI.cont()
 
     @staticmethod
     def add_person_UI():
@@ -88,6 +106,20 @@ class PhoneBookUI:
     def show_list_UI():
         for id, person in PhoneBook.book_arr.items():
             print("id is {0}, name is {1}, phone number is {2}".format(id, person.name, person.phone_number))
+
+    @staticmethod
+    def save_book_UI():
+        answer = input(f'Would you like to save book?(y/n) ---> ')
+        if answer == 'y':
+            PhoneBookUI.book.save_book()
+            print('Book was saved')
+
+    @staticmethod
+    def load_book_UI():
+        answer = input(f'Would you like to load book?(y/n) ---> ')
+        if answer == 'y':
+            PhoneBookUI.book.load_book()
+            print('Book was loaded')
 
 
 def main():
